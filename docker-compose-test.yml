@@ -37,10 +37,8 @@ services:
       timeout: 5s
       retries: 5
 
-  dbreader-app-1:
-    # build: .
-    container_name: dbreader-app-1
-    hostname: dbreader-app-1
+  dbreader-app:
+    hostname: dbreader-app
     image: openjdk:17-jdk-slim
     command: ['java', '-jar', '/app/db-reader-1.0.0.jar']
     volumes:
@@ -55,42 +53,8 @@ services:
     networks:
       - dbreader-network
     restart: unless-stopped
-
-  dbreader-app-2:
-    image: openjdk:17-jdk-slim
-    command: ['java', '-jar', '/app/db-reader-1.0.0.jar']
-    volumes:
-      - ${WORKSPACE_PATH_ON_HOST}/target:/app
-    container_name: dbreader-app-2
-    hostname: dbreader-app-2
-    environment:
-      - APP_PROCESSING_INTERVAL=${PROCESSING_INTERVAL:-60000} # Default 1 minute
-    depends_on:
-      zookeeper:
-        condition: service_healthy
-      mysql:
-        condition: service_healthy
-    networks:
-      - dbreader-network
-    restart: unless-stopped
-
-  dbreader-app-3:
-    image: openjdk:17-jdk-slim
-    command: ['java', '-jar', '/app/db-reader-1.0.0.jar']
-    volumes:
-      - ${WORKSPACE_PATH_ON_HOST}/target:/app
-    container_name: dbreader-app-3
-    hostname: dbreader-app-3
-    environment:
-      - APP_PROCESSING_INTERVAL=${PROCESSING_INTERVAL:-60000} # Default 1 minute
-    depends_on:
-      zookeeper:
-        condition: service_healthy
-      mysql:
-        condition: service_healthy
-    networks:
-      - dbreader-network
-    restart: unless-stopped
+    deploy:
+      replicas: 3
 
 volumes:
   mysql_data:
