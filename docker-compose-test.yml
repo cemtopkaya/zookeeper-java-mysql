@@ -1,0 +1,101 @@
+name: zookeeper-java
+
+services:
+  zookeeper:
+    image: confluentinc/cp-zookeeper:7.4.0
+    hostname: zookeeper
+    container_name: zookeeper
+    environment:
+      ZOOKEEPER_CLIENT_PORT: 2181
+      ZOOKEEPER_TICK_TIME: 2000
+    ports:
+      - '2181:2181'
+    networks:
+      - dbreader-network
+    healthcheck:
+      test: ['CMD', 'nc', '-z', 'localhost', '2181']
+      interval: 10s
+      timeout: 5s
+      retries: 5
+
+  mysql:
+    image: mysql:8.0
+    container_name: mysql
+    environment:
+      MYSQL_ROOT_PASSWORD: rootpassword
+      MYSQL_DATABASE: dbreader_db
+    ports:
+      - '3306:3306'
+    volumes:
+      - mysql_data:/var/lib/mysql
+      - ${WORKSPACE_PATH_ON_HOST}/init.sql:/docker-entrypoint-initdb.d/init.sql
+    networks:
+      - dbreader-network
+    healthcheck:
+      test: ['CMD', 'mysqladmin', 'ping', '-h', 'localhost']
+      interval: 10s
+      timeout: 5s
+      retries: 5
+
+  dbreader-app-1:
+    # build: .
+    container_name: dbreader-app-1
+    hostname: dbreader-app-1
+    image: openjdk:17-jdk-slim
+    command: ['java', '-jar', '/app/db-reader-1.0.0.jar']
+    volumes:
+      - ${WORKSPACE_PATH_ON_HOST}/target:/app
+    environment:
+      - APP_PROCESSING_INTERVAL=${PROCESSING_INTERVAL:-60000} # Default 1 minute
+    depends_on:
+      zookeeper:
+        condition: service_healthy
+      mysql:
+        condition: service_healthy
+    networks:
+      - dbreader-network
+    restart: unless-stopped
+
+  dbreader-app-2:
+    image: openjdk:17-jdk-slim
+    command: ['java', '-jar', '/app/db-reader-1.0.0.jar']
+    volumes:
+      - ${WORKSPACE_PATH_ON_HOST}/target:/app
+    container_name: dbreader-app-2
+    hostname: dbreader-app-2
+    environment:
+      - APP_PROCESSING_INTERVAL=${PROCESSING_INTERVAL:-60000} # Default 1 minute
+    depends_on:
+      zookeeper:
+        condition: service_healthy
+      mysql:
+        condition: service_healthy
+    networks:
+      - dbreader-network
+    restart: unless-stopped
+
+  dbreader-app-3:
+    image: openjdk:17-jdk-slim
+    command: ['java', '-jar', '/app/db-reader-1.0.0.jar']
+    volumes:
+      - ${WORKSPACE_PATH_ON_HOST}/target:/app
+    container_name: dbreader-app-3
+    hostname: dbreader-app-3
+    environment:
+      - APP_PROCESSING_INTERVAL=${PROCESSING_INTERVAL:-60000} # Default 1 minute
+    depends_on:
+      zookeeper:
+        condition: service_healthy
+      mysql:
+        condition: service_healthy
+    networks:
+      - dbreader-network
+    restart: unless-stopped
+
+volumes:
+  mysql_data:
+
+networks:
+  dbreader-network:
+    name: dbreader-test_network
+    driver: bridge

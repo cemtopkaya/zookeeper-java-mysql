@@ -1,0 +1,206 @@
+ {
+  "name": "Zookeeper Devcontainer",
+  "dockerComposeFile": [
+    "./docker-compose-dev.yml"
+    // , "./docker-compose-test.yml"
+  ],
+  "service": "dbreader_devcontainer",
+  "runServices": [
+    "dbreader_devcontainer"
+    // ,"mysql"
+    // ,"rabbitmq"
+    // ,"zookeeper"
+    // ,"ngeqm_api"
+    // ,"ngeqm_event_manager"
+    // ,"ngeqm_queue_manager"
+  ],
+  "remoteEnv": {
+    "LOCAL_WORKSPACE_FOLDER": "${localWorkspaceFolder}",
+    "COMPOSE_PROJECT_NAME": "ngeqm_project"
+  },
+  "containerEnv": {
+    "JVM_ARGS_DEBUG": "-agentlib:jdwp=transport=dt_socket,server=y,suspend=y,address=*:5005",
+    "COMPOSE_PROJECT_NAME": "ngeqm_devcontainer",
+    "VM_ARGS": "-Xms512m -Xmx4G --add-opens java.base/java.net=ALL-UNNAMED --add-opens java.base/java.lang=ALL-UNNAMED --add-opens java.base/java.lang.reflect=ALL-UNNAMED --add-opens java.base/java.io=ALL-UNNAMED --add-exports jdk.unsupported/sun.misc=ALL-UNNAMED --add-exports jdk.management.agent/jdk.internal.agent=ALL-UNNAMED --add-opens java.base/java.text=ALL-UNNAMED --add-opens java.base/java.util.concurrent.atomic=ALL-UNNAMED --add-opens java.base/java.util=ALL-UNNAMED",
+    "JVM_ARGS": "-Xms512m -Xmx4G --add-exports=java.base/sun.nio.ch=ALL-UNNAMED --add-opens=java.base/java.net=ALL-UNNAMED --add-opens=java.base/java.lang=ALL-UNNAMED --add-opens=java.base/java.lang.reflect=ALL-UNNAMED --add-opens=java.base/java.io=ALL-UNNAMED --add-exports=jdk.unsupported/sun.misc=ALL-UNNAMED --add-exports=jdk.management.agent/jdk.internal.agent=ALL-UNNAMED --add-opens=java.base/java.text=ALL-UNNAMED --add-opens=java.base/java.util.concurrent.atomic=ALL-UNNAMED --add-opens=java.base/java.util=ALL-UNNAMED",
+    "JVM_ARGS_DEBUG_SUSPEND": "-agentlib:jdwp=transport=dt_socket,server=y,suspend=y,address=*:5005",
+    "JVM_ARGS_DEBUG_NOT_SUSPEND": "-agentlib:jdwp=transport=dt_socket,server=y,suspend=n,address=*:5005"
+  },
+  "workspaceFolder": "${localWorkspaceFolder}",
+  "features": {
+    // "ghcr.io/devcontainers/features/node:1": {
+    //   "version": "22"
+    // }
+  },
+  "customizations": {
+    "vscode": {
+      "extensions": [
+        // Source Control and Collaboration
+        "donjayamanne.githistory", // Provides a visual Git history.
+        "nico-mayer.git-differ", // Effortlessly compare any file in your project with local or remote Git branches
+        "MS-vsliveshare.vsliveshare", // Enables real-time code collaboration.
+        "evertjunior.llm-commit", // Generates commit messages using an LLM.
+        // Code Formatting and Linting
+        "dbaeumer.vscode-eslint", // Integrates ESLint for code quality and style.
+        "esbenp.prettier-vscode", // Formats code automatically with Prettier.
+        "SonarSource.sonarlint-vscode", // Finds and highlights bugs and security issues.
+        "NicolasVuillamy.vscode-groovy-lint", // Linter for Groovy files.
+        "EditorConfig.EditorConfig", // Ensures consistent code styles across editors.
+        // Language and Snippets
+        "dsznajder.es7-react-js-snippets", // Provides snippets for ES7 and React.
+        "formulahendry.auto-rename-tag", // Automatically renames paired HTML/XML tags.
+        "christian-kohler.path-intellisense", // Autocompletes filenames and paths.
+        // Testing and Development
+        "ritwickdey.LiveServer", // Launches a local development server with live reload.
+        "formulahendry.code-runner", // Runs code snippets or files of various languages.
+        "formulahendry.code-runner", // Allows quick execution of code snippets in multiple languages.
+        // Cloud and Containerization
+        "ms-azuretools.vscode-docker", // Integrates Docker commands and management.
+        "ms-kubernetes-tools.vscode-kubernetes-tools", // Provides tools for working with Kubernetes clusters.
+        "Tim-Koehler.helm-intellisense", // Adds autocompletion and linting for Helm charts.
+        "formulahendry.docker-explorer", // Explore Docker containers and images inside VS Code.
+        // Utilities and Tools
+        "mushan.vscode-paste-image", // Easily pastes images from the clipboard.
+        "hanskre.markdown-execute", // Executes code blocks in Markdown files.
+        "humao.rest-client", // Sends HTTP requests and views responses in VS Code.
+        "PKief.material-icon-theme", // Applies material design icons for files and folders.
+        "in4margaret.compareit", // Compares two files or selections.
+        "outofsync42.select-compare-tabs", // Compare open tabs in the editor.
+        "chekweitan.compare-view", // Side-by-side file comparison.
+        "moshfeu.compare-folders", // Compare folder structures and contents.
+        "dqisme.sync-scroll", // Syncs the scroll position of two editors.
+        "alefragnani.Bookmarks", // Helps manage and navigate bookmarks in your code.
+        "IBM.output-colorizer", // Adds syntax highlighting to log files in the output panel.
+        "jebbs.plantuml", // Supports PlantUML diagram creation and preview.
+        "skyer.vscode-markdown-diagram", // Previews diagrams in markdown files using plantuml or mermaid
+        "bpruitt-goddard.mermaid-markdown-syntax-highlighting", // Markdown syntax support for the Mermaid charting language
+        "lostintangent.vsls-whiteboard", // Provides a collaborative whiteboard for Live Share sessions.
+        // Java Development
+        "vscjava.vscode-java-pack", // Full Java development pack (language support, debugger, etc.)
+        "vscjava.vscode-java-dependency", // A lightweight extension to provide additional Java project explorer features.
+        "redhat.java", // Language support for Java ™ for Visual Studio Code
+        "redhat.vscode-xml", // XML language support.
+        "seanmcshane.jar-viewer-and-decompiler", // View and decompile JAR files.
+        // Productivity and Workflow
+        "Gruntfuggly.todo-tree", // Manage and view TODO comments across codebase.
+        "davehart.quick-run-panel" // Run scripts/commands quickly from a side panel.
+      ],
+      "settings": {
+        // ==== VS Code çekirdek ayarları (Global) ==========================================================
+        "terminal.integrated.defaultProfile.linux": "bash",
+        "terminal.integrated.scrollback": 90000,
+        // ==== Dosya ayarları ==============================================================================
+        "files.trimTrailingWhitespace": true,
+        "files.insertFinalNewline": true,
+        // ==== Editor davranışları =========================================================================
+        "editor.formatOnSave": true,
+        "editor.defaultFormatter": "esbenp.prettier-vscode",
+        "editor.detectIndentation": false,
+        "editor.tabSize": 4,
+        "editor.insertSpaces": true,
+        "editor.codeActionsOnSave": {
+          "source.fixAll.eslint": "explicit",
+          "source.organizeImports": "explicit"
+        },
+        // ==== Dil servisi ayarları (Global) ===============================================================
+        "[java]": {
+          "editor.defaultFormatter": "esbenp.prettier-vscode",
+          "editor.formatOnSave": true
+        },
+        "[json]": {
+          "editor.defaultFormatter": "esbenp.prettier-vscode",
+          "editor.formatOnSave": true,
+          "format.insertSpaces": true,
+          "format.tabSize": 2
+        },
+        "[jsonc]": {
+          "editor.defaultFormatter": "esbenp.prettier-vscode",
+          "editor.formatOnSave": true
+        },
+        "[markdown]": {
+          "editor.defaultFormatter": "esbenp.prettier-vscode",
+          "editor.formatOnSave": true
+        },
+        // ==== Extension ayarları (Global) =================================================================
+        // ==== Oracle.oracle-java Extension Settings =======================================================
+        // Formatting java files with Oracle.oracle-java extension
+        "java.format.enabled": true,
+        // Running java files with Oracle.oracle-java extension with specific VM options
+        "jdk.runConfig.vmOptions": "-Dgateway=ApiGateway -Xms256m -Xmx256m",
+        "java.compile.nullAnalysis.nonnull": [
+          "javax.annotation.Nonnull",
+          "org.eclipse.jdt.annotation.NonNull",
+          "org.springframework.lang.NonNull"
+        ],
+        "java.compile.nullAnalysis.mode": "disabled",
+        // ==== redhat.java Extension Settings ==============================================================
+        "java.jdt.ls.vmargs": "-javaagent:/root/.m2/repository/org/projectlombok/lombok/1.18.36/lombok-1.18.36.jar",
+        // ==== redhat.vscode-xml Extension Settings ========================================================
+        "xml.java.home": "/usr/lib/jvm/java-17/bin",
+        // ==== Prettier settings ===========================================================================
+        "prettier.trailingComma": "none",
+        "prettier.singleQuote": true,
+        "prettier.semi": true,
+        "prettier.tabWidth": 2,
+        "prettier.printWidth": 100,
+        "prettier.bracketSpacing": true,
+        "prettier.arrowParens": "avoid",
+        "prettier.endOfLine": "lf",
+        //  ==== LLM Commit Settings ========================================================================
+        "llm-commit.provider": "custom",
+        "llm-commit.apiUrl": "http://10.34.34.244:11434/v1/chat/completions",
+        "llm-commit.prompt": "Act as a Git expert specializing in professional commit message standards. Your task is to analyze code changes and generate a detailed Git commit message in plaintext format (no Markdown or code blocks). The message should have three parts: a single-line subject, a multi-line body explaining the changes in detail, and a footer listing the changed files. The subject must follow the `<type>: <description>` format. Use imperative, present-tense verbs.\n\n**Commit Types:**\n- feat|fix|docs|style|refactor|test|chore \n- feat: A new feature is introduced.\n- fix: A bug is fixed.\n- If changed files include *.md, type MUST be `docs`.\n- docs: Documentation is updated or added.\n- style: Code formatting changes.\n- refactor: Code restructuring.\n- test: Test changes.\n- chore: Build or tool changes.\n\n**Instructions:**\n1. Generate the commit message strictly as plaintext.\n2. Do not wrap the output in Markdown (e.g., no ``` or **).\n3. The footer must start with 'Changed files:' on a new line.\n4. **STRICTLY FORBIDDEN:** Markdown, code blocks (```), backticks (`), bold/italic symbols.\n\nCode changes to analyze:\ndiff\n{diff}",
+        "llm-commit.model": "qwen/qwen2.5-coder-14b",
+        //  ==== Material Icons Settings ====================================================================
+        "material-icon-theme.activeIconPack": "react",
+        "material-icon-theme.folders.theme": "specific",
+        "material-icon-theme.files.color": "#90a4ae",
+        "material-icon-theme.folders.color": "#90a4ae",
+        // ===== SonarQube settings ===========================================================================
+        "sonarlint.ls.javaHome": "/usr/lib/jvm/java-17/bin",
+        // To analyze JavaScript, TypeScript, or CSS code, SonarQube for VS Code requires Node.js executable.
+        "sonarlint.pathToNodeExecutable": "/usr/bin/node",
+        // src dışındaki tüm dosyaları hariç tutar
+        "sonarlint.analysisExcludesStandalone": "**/datasources/**,**/docker/**,**/.devcontainer/**,**/helm/**,**/.mvn/**,**/.vscode/**",
+        "sonarlint.analyzerProperties": {
+          "sonar.sources": "scm-main/src",
+          // JavaScript/TypeScript özel ayarları / JavaScript/TypeScript specific settings
+          "sonar.javascript.globals": "myGlobalVar,jQuery,$,window,document,global,process",
+          "sonar.typescript.tsconfigPath": "./tsconfig.json",
+          "sonar.javascript.environments": "browser,node,jest,mocha",
+          "sonar.javascript.lcov.reportPaths": "coverage/lcov.info",
+          // Genel hariç tutma ayarları / General exclusion settings
+          // "sonar.exclusions": is intended for passing exclusions used by the server-side scanner but is frequently ignored by the SonarLint plugin in standalone/local analysis inside IDEs and works when analysis is run on the server or via the SonarQube scanner.
+          "sonar.exclusions": "**/.devcontainer/**,**/.vscode/**,**/node_modules/**,**/public/**,**/test-results/**,**/.scannerwork/**,**/dist/**,**/build/**,**/*.min.js",
+          "sonar.test.exclusions": "**/*.spec.js,**/*.test.js,**/test/**,**/tests/**",
+          "sonar.coverage.exclusions": "**/.devcontainer/**,**/.vscode/**,**/config/**,**/test-results/**,**/test/**,**/*.spec.ts,**/*.test.ts"
+        },
+        "sonarlint.trace.server": "off",
+        "sonarlint.output.showVerboseLogs": false,
+        "sonarlint.output.showAnalyzerLogs": false,
+        "sonarlint.connectedMode.connections.sonarqube": [
+          {
+            "serverUrl": "https://sonar.telenity.com",
+            "connectionId": "telenity",
+            "disableNotifications": false
+          }
+        ],
+        "sonarlint.connectedMode.project": {
+          "projectKey": "com.telenity.ngeqm:ngeqm-parent",
+          "connectionId": "telenity"
+        },
+        // ===== mushan.vscode-paste-image Extension Settings =================================================
+        "pasteImage.basePath": "${projectRoot}",
+        "pasteImage.namePrefix": "readme_",
+        "pasteImage.path": ".vscode/images",
+        "pasteImage.showFilePathConfirmInputBox": true
+      }
+    }
+  },
+  "overrideCommand": false,
+  "remoteUser": "root",
+  "forwardPorts": [5173, 8080],
+  // ,"postStartCommand": "cd .devcontainer && ./scripts/all_scripts.sh --phase=postStart"
+  // ,"postCreateCommand": "cd .devcontainer && ./scripts/all_scripts.sh --phase=postCreate"
+  "initializeCommand": "./.devcontainer/scripts/initializeCommand.sh"
+}
