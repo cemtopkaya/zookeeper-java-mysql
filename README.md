@@ -177,6 +177,19 @@ Zookeeper, dağıtık sistemlerde koordinasyon sağlamak için kullanılan güç
 
 Bu mekanizma, master'ın çökmesi durumunda dahi hizmetin kesintisiz devam etmesini sağlar. Sistemde birden fazla master olmasını engellediği için tekil bir kontrol noktası (single point of control) oluşturulur.
 
+### Java Uygulaması
+
+Basit bir Spring Boot projesi kullanacağız. Maven bağımlılıkları şunlardır:
+
+- `spring-boot-starter`: Spring Boot uygulamasının temel bağımlılıkları ve alt yapısı. (Basit bir web uygulaması da dahil)
+- `spring-boot-starter-data-jpa`: Veritabanı işlemleri için JPA (Java Persistence API) desteği sağlar.
+- `mysql-connector-j`: MySQL veritabanı sürücüsü, uygulamanın MySQL ile iletişim kurmasını sağlar.
+- `org.apache.curator:curator-framework`: Apache ZooKeeper ile etkileşime geçmek için kullanılan yüksek seviyeli API.
+- `org.apache.curator:curator-recipes`: Apache Curator tarafından sağlanan ek ZooKeeper işlemleri ve kolaylıklar.
+- `com.h2database:h2`: Test ortamında kullanılan hafif, bellek içi veritabanı.
+- `spring-boot-starter-test`: Spring Boot tabanlı uygulamalar için test kütüphaneleri.
+- `org.testcontainers:junit-jupiter ve org.testcontainers:mysql`: Test konteynerleriyle (özellikle MySQL) entegrasyon ve test desteği.
+
 ## CLI Komutları
 
 #### Temel Komutlar

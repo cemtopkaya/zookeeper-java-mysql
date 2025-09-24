@@ -1,4 +1,4 @@
- {
+{
   "name": "Zookeeper Devcontainer",
   "dockerComposeFile": [
     "./docker-compose-dev.yml"
@@ -148,7 +148,7 @@
         "prettier.endOfLine": "lf",
         //  ==== LLM Commit Settings ========================================================================
         "llm-commit.provider": "custom",
-        "llm-commit.apiUrl": "http://10.34.34.244:11434/v1/chat/completions",
+        "llm-commit.apiUrl": "http://192.168.1.180:1234/v1/chat/completions",
         "llm-commit.prompt": "Act as a Git expert specializing in professional commit message standards. Your task is to analyze code changes and generate a detailed Git commit message in plaintext format (no Markdown or code blocks). The message should have three parts: a single-line subject, a multi-line body explaining the changes in detail, and a footer listing the changed files. The subject must follow the `<type>: <description>` format. Use imperative, present-tense verbs.\n\n**Commit Types:**\n- feat|fix|docs|style|refactor|test|chore \n- feat: A new feature is introduced.\n- fix: A bug is fixed.\n- If changed files include *.md, type MUST be `docs`.\n- docs: Documentation is updated or added.\n- style: Code formatting changes.\n- refactor: Code restructuring.\n- test: Test changes.\n- chore: Build or tool changes.\n\n**Instructions:**\n1. Generate the commit message strictly as plaintext.\n2. Do not wrap the output in Markdown (e.g., no ``` or **).\n3. The footer must start with 'Changed files:' on a new line.\n4. **STRICTLY FORBIDDEN:** Markdown, code blocks (```), backticks (`), bold/italic symbols.\n\nCode changes to analyze:\ndiff\n{diff}",
         "llm-commit.model": "qwen/qwen2.5-coder-14b",
         //  ==== Material Icons Settings ====================================================================
