@@ -10,7 +10,10 @@ services:
     container_name: dbreader_devcontainer
     env_file: .env
     environment:
-      COMPOSE_PROJECT_NAME: 'zookeeper-java'
+      TZ: Europe/Istanbul
+      COMPOSE_PROJECT_NAME: "zookeeper-java"
+    networks:
+      - dbreader-network-dev
     volumes:
       # Mount the project directory to the same path as on host
       - ${WORKSPACE_PATH_ON_HOST}:${WORKSPACE_PATH_ON_HOST}:cached
@@ -18,7 +21,45 @@ services:
       - ~/.ssh:/root/.ssh:ro
       - ~/.gitconfig:/root/.gitconfig:ro
 
+  zookeeper:
+    image: confluentinc/cp-zookeeper:7.4.0
+    hostname: zookeeper
+    container_name: zookeeper
+    environment:
+      TZ: Europe/Istanbul
+      ZOOKEEPER_CLIENT_PORT: 2181
+      ZOOKEEPER_TICK_TIME: 2000
+    ports:
+      - "2181:2181"
+    networks:
+      - dbreader-network-dev
+    healthcheck:
+      test: ["CMD", "nc", "-z", "localhost", "2181"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+
+  mysql:
+    image: mysql:8.0
+    container_name: mysql
+    environment:
+      TZ: Europe/Istanbul
+      MYSQL_ROOT_PASSWORD: rootpassword
+      MYSQL_DATABASE: dbreader_db
+    ports:
+      - "3306:3306"
+    volumes:
+      # - mysql_data:/var/lib/mysql
+      - ${WORKSPACE_PATH_ON_HOST}/init.sql:/docker-entrypoint-initdb.d/init.sql
+    networks:
+      - dbreader-network-dev
+    healthcheck:
+      test: ["CMD", "mysqladmin", "ping", "-h", "localhost"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+
 networks:
-  dbreader-network:
-    name: dbreader-network
+  dbreader-network-dev:
+    name: dbreader-network-dev
     driver: bridge
