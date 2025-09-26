@@ -49,14 +49,15 @@ services:
       CB_ADMIN_NAME: "cbadmin"
       CB_ADMIN_PASSWORD: "q1w2e3r4"
     ports:
+      # http://localhost:10100
       - "10100:8978"
     networks:
-      ngeqm_testnet:
+      dbreader-network-test:
         aliases:
           - dbeaver
-    volumes:
-      - ${WORKSPACE_PATH_ON_HOST}/.devcontainer/services/cloudbeaver/volume/workspace/GlobalConfiguration/.dbeaver:/opt/cloudbeaver/workspace/GlobalConfiguration/.dbeaver
-      
+          - cloudbeaver
+    # volumes:
+    #   - ${WORKSPACE_PATH_ON_HOST}/.devcontainer/services/cloudbeaver/volume/workspace/GlobalConfiguration/.dbeaver:/opt/cloudbeaver/workspace/GlobalConfiguration/.dbeaver
 
   dbreader-app-1:
     # build: .
