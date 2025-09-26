@@ -28,6 +28,7 @@ import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.scheduling.annotation.EnableScheduling;
 import org.springframework.scheduling.annotation.Scheduled;
+import org.springframework.stereotype.Component;
 
 // Bu sınıf uygulamanın ana giriş noktasıdır.
 // @SpringBootApplication: Spring Boot uygulamasının ana yapılandırmasını sağlar.
@@ -52,6 +53,10 @@ public class DatabaseReaderApplication implements CommandLineRunner {
         // Liderlik seçim sürecini başlatan metodu çağırır.
         leaderElection.start();
 
+        // 💡 ÇÖZÜM: Uygulama çalışmaya devam ederken ana thread'i bloke etmek için bir kilit objesi kullanıyoruz.
+        // Liderlik seçimi ve periyodik işlemlerin çalışması için uygulama ayakta kalmalıdır.
+        Object lock = new Object();
+
         // Uygulama kapatıldığında (örneğin Ctrl+C ile) temiz bir şekilde kapanma işlemi için bir "shutdown hook" eklenir.
         Runtime.getRuntime().addShutdownHook(new Thread(() -> {
             try {
@@ -61,6 +66,11 @@ public class DatabaseReaderApplication implements CommandLineRunner {
                 e.printStackTrace();
             }
         }));
+
+        // Ana thread'i, kapatma kancası (shutdown hook) tetiklenene kadar bloke et.
+        synchronized (lock) {
+        lock.wait();
+    }
     }
 }
 
@@ -176,6 +186,7 @@ class DataProcessor {
 
 // Bu sınıf, Zookeeper'ın **Apache Curator** kütüphanesi ile liderlik seçimi mantığını uygular.
 // @Component: Spring'e bu sınıfın bir bileşen olduğunu belirtir, böylece enjekte edilebilir.
+@Component
 class ZooKeeperLeaderElection {
 
     // Zookeeper bağlantı dizesini uygulama ayarlarından alır.
