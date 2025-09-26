@@ -6,6 +6,47 @@
 - ./build.sh ve ./setup.sh executable yapmayı unutma
 - Environment variables .env dosyasında
 
+```mermaid
+sequenceDiagram
+    participant App as DatabaseReaderApplication
+    participant ZkEl as ZooKeeperLeaderElection
+    participant Proc as DataProcessor
+    participant Zk as Zookeeper Cluster
+
+    %% 1. Başlatma ve Zookeeper Bağlantısı
+    App->>ZkEl: start() // Leader Selection Başlat
+    ZkEl->>Zk: client.start() & blockUntilConnected()
+    ZkEl->>Zk: leaderSelector.start() // Liderlik Seçimi Başladı (Async)
+
+    %% 2. Ana Thread'in Bloklanması (lock.wait())
+    Note over App: Main Thread Bloke Edildi (lock.wait())
+
+    %% 3. Liderlik Seçimi Akışı
+    par Liderlik Seçim Süreci
+        Zk->>ZkEl: takeLeadership() çağrıldı
+        ZkEl->>ZkEl: isLeader = true (👑 MASTER)
+        Note right of ZkEl: Liderlik Koruma Döngüsü Başladı
+    and Periyodik Veri İşleme
+        loop Her ${app.processing.interval:60000} ms
+            Proc->>ZkEl: isLeader() kontrol et
+            alt isLeader == true
+                Proc->>Proc: Veritabanı Kayıtlarını İşle (🔥)
+            else isLeader == false
+                Proc->>Proc: İşlem Yapma (Pass)
+            end
+        end
+    end
+
+    %% 4. Kapanma Akışı (Shutdown Hook)
+    Note over App,ZkEl: Uygulama Kapatma Sinyali Geldi (Shutdown Hook)
+    App->>App: Shutdown Hook Başladı
+    App->>ZkEl: stop()
+    ZkEl->>ZkEl: isLeader = false
+    ZkEl->>Zk: leaderSelector.close() & client.close()
+    Note over App: Main Thread Serbest Bırakıldı (lock.wait() bitti)
+    App->>App: Uygulama Sonlandı
+```
+
 #### Hızlı Başlatma
 
 ```sh
@@ -16,10 +57,10 @@ mvn clean package -DskipTests
 docker compose -f docker-compose-test.yml up --build -d zookeeper mysql dbreader-app-1 dbreader-app-2 dbreader-app-3
 
 # 2. Logları izle:
-docker compose -f docker-compose logs  -f
+docker compose -f docker-compose-test.yml logs  -f
 
 # 3. Master'ı gör:
-docker compose -f docker-compose logs | grep "became MASTER"
+docker compose -f docker-compose-test.yml logs | grep "became MASTER"
 
 # 4. Test verisi ekle:
 docker exec -it mysql mysql -u root -prootpassword dbreader_db -e "
