@@ -53,7 +53,7 @@ public class DatabaseReaderApplication implements CommandLineRunner {
         // Liderlik seçim sürecini başlatan metodu çağırır.
         leaderElection.start();
 
-        // 💡 ÇÖZÜM: Uygulama çalışmaya devam ederken ana thread'i bloke etmek için bir kilit objesi kullanıyoruz.
+        // Uygulama çalışmaya devam ederken ana thread'i bloke etmek için bir kilit objesi kullanıyoruz.
         // Liderlik seçimi ve periyodik işlemlerin çalışması için uygulama ayakta kalmalıdır.
         Object lock = new Object();
 

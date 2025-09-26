@@ -39,6 +39,25 @@ services:
       timeout: 5s
       retries: 5
 
+  cloudbeaver:
+    image: dbeaver/cloudbeaver:25.2.1
+    container_name: cloudbeaver
+    restart: unless-stopped
+    environment:
+      CB_SERVER_NAME: "cloudbeaver"
+      CB_SERVER_URL: "https://cloudbeaver:10100/"
+      CB_ADMIN_NAME: "cbadmin"
+      CB_ADMIN_PASSWORD: "q1w2e3r4"
+    ports:
+      - "10100:8978"
+    networks:
+      ngeqm_testnet:
+        aliases:
+          - dbeaver
+    volumes:
+      - ${WORKSPACE_PATH_ON_HOST}/.devcontainer/services/cloudbeaver/volume/workspace/GlobalConfiguration/.dbeaver:/opt/cloudbeaver/workspace/GlobalConfiguration/.dbeaver
+      
+
   dbreader-app-1:
     # build: .
     container_name: dbreader-app-1
